@@ -8,30 +8,23 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class MainVerticle extends AbstractVerticle {
+
+  HashMap<Integer, Todo> todos = new HashMap<>();
   @Override
   public void start() throws Exception {
     // Create a Router
     Router router = Router.router(vertx);
 
-    // Mount the handler for all incoming requests at every path and HTTP method
-//    router.route().handler(context -> {
-//      // Get the address of the request
-//      String address = context.request().connection().remoteAddress().toString();
-//      // Get the query parameter "name"
-//      MultiMap queryParams = context.queryParams();
-//      String name = queryParams.contains("name") ? queryParams.get("name") : "unknown";
-//      // Write a json response
-//      context.json(
-//        new JsonObject()
-//          .put("name", name)
-//          .put("address", address)
-//          .put("message", "Hello " + name + " connected from " + address)
-//      );
-//    });
-
     router.get("/api/todo/:id")
       .handler(this::getTodo);
+
+    router.post("/api/todo")
+        .handler(this::addTodo);
 
     // Create the HTTP server
     vertx.createHttpServer()
@@ -47,11 +40,20 @@ public class MainVerticle extends AbstractVerticle {
       );
   }
 
+  private void addTodo(RoutingContext routingContext) {
+    Todo todo = new Todo(
+      "get milk", "true", "01-02-2017");
+    this.todos.put(todos.size() + 1, todo);
+
+  }
+
   private void getTodo(RoutingContext routingContext) {
     String todoid = routingContext.request()
       .getParam("id");
-    Todo todo = new Todo(todoid,
+    Todo todo = new Todo(
       "get milk", "true", "01-02-2017");
+    this.todos.put(todos.size() + 1, todo);
+    Todo todo2 = todos.get(todoid);
 
     routingContext.response()
       .putHeader("content-type", "application/json")

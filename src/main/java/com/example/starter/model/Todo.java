@@ -1,25 +1,15 @@
 package com.example.starter.model;
 
 public class Todo {
-  private String id;
   private String name;
   private String done;
 
   private String date;
 
-  public Todo(String id, String name, String done, String date) {
-    this.id = id;
+  public Todo(String name, String done, String date) {
     this.name = name;
     this.done = done;
     this.date = date;
-  }
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
   }
 
   public String getName() {
